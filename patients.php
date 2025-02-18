@@ -131,7 +131,7 @@ include './config/sidebar.php';?>
                 class="form-control form-control-sm rounded-0"/>
               </div>
               <div class="col-lg-4 col-md-4 col-sm-4 col-xs-10">
-                <label>CNIC</label>
+                <label>Patient Number</label>
                 <input type="text" id="cnic" name="cnic" required="required"
                 class="form-control form-control-sm rounded-0"/>
               </div>
@@ -211,7 +211,7 @@ include './config/sidebar.php';?>
                     <th>S.No</th>
                     <th>Patient Name</th>
                     <th>Address</th>
-                    <th>CNIC</th>
+                    <th>Patient Number</th>
                     <th>Date Of Birth</th>
                     <th>Phone Number</th>
                     <th>Gender</th>
