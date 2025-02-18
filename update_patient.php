@@ -141,7 +141,7 @@ include './config/sidebar.php';?>
                 class="form-control form-control-sm rounded-0" value="<?php echo $row['address'];?>" />
               </div>
               <div class="col-lg-4 col-md-4 col-sm-4 col-xs-10">
-                <label>CNIC</label>
+                <label>Patient Number</label>
                 <input type="text" id="cnic" name="cnic" required="required"
                 class="form-control form-control-sm rounded-0" value="<?php echo $row['cnic'];?>" />
               </div>
