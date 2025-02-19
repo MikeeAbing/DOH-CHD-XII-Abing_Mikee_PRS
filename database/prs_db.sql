@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3307
--- Generation Time: Feb 14, 2025 at 04:10 PM
+-- Generation Time: Feb 19, 2025 at 02:55 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `pms_db`
+-- Database: `prs_db`
 --
 
 -- --------------------------------------------------------
@@ -94,19 +94,22 @@ CREATE TABLE `patients` (
   `id` int(11) NOT NULL,
   `patient_name` varchar(60) NOT NULL,
   `address` varchar(100) NOT NULL,
-  `cnic` varchar(17) NOT NULL,
+  `patient_number` varchar(17) DEFAULT NULL,
   `date_of_birth` date NOT NULL,
   `phone_number` varchar(12) NOT NULL,
-  `gender` varchar(6) NOT NULL
+  `gender` varchar(6) NOT NULL,
+  `deleted_at` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `patients`
 --
 
-INSERT INTO `patients` (`id`, `patient_name`, `address`, `cnic`, `date_of_birth`, `phone_number`, `gender`) VALUES
-(1, 'Test', 'Test', '123654789', '1999-06-23', '0000000000', 'Female'),
-(2, 'Juan Dela Cruz', 'Koronadal City', 'n/a', '2025-02-14', '0909090909', 'Male');
+INSERT INTO `patients` (`id`, `patient_name`, `address`, `patient_number`, `date_of_birth`, `phone_number`, `gender`, `deleted_at`) VALUES
+(1, 'Test', 'Test', '123654789', '1999-06-23', '0000000000', 'Female', NULL),
+(2, 'Juan Dela Cruz', 'Koronadal City', '1221', '2025-02-14', '0909090909', 'Male', '2025-02-19 09:32:31'),
+(3, 'Mikee Abing', 'Isulan', '1213', '1999-10-17', '09123451234', 'Female', '2025-02-19 08:54:35'),
+(4, 'Sample Patient', 'General Santos City', '1001', '2005-01-07', '09001234567', 'Male', NULL);
 
 -- --------------------------------------------------------
 
@@ -131,7 +134,9 @@ INSERT INTO `patient_medication_history` (`id`, `patient_visit_id`, `medicine_de
 (2, 1, 6, 2, '500'),
 (3, 2, 2, 2, '250'),
 (4, 2, 7, 2, '250'),
-(5, 6, 6, 100, '240');
+(5, 6, 6, 100, '240'),
+(6, 7, 8, 10, '10'),
+(7, 8, 3, 50, '50');
 
 -- --------------------------------------------------------
 
@@ -157,7 +162,9 @@ INSERT INTO `patient_visits` (`id`, `visit_date`, `next_visit_date`, `bp`, `weig
 (1, '2025-02-10', '2025-02-12', '120/80', '65 kg.', 'Wounded Arm', 1),
 (2, '2025-02-10', '2025-02-12', '120/80', '65 kg.', 'Rhinovirus', 1),
 (5, '2025-02-14', '2025-02-21', '120/80', '55 kg.', 'Highblood', 2),
-(6, '2025-02-11', '2025-02-14', '120/80', '58 kg.', 'Headache', 2);
+(6, '2025-02-11', '2025-02-14', '120/80', '58 kg.', 'Headache', 2),
+(7, '2025-02-04', '2025-02-14', '110/80', '59', 'Headache', 3),
+(8, '2025-02-19', '2025-02-22', '110/90', '60', 'Allergy', 4);
 
 -- --------------------------------------------------------
 
@@ -258,19 +265,19 @@ ALTER TABLE `migrations`
 -- AUTO_INCREMENT for table `patients`
 --
 ALTER TABLE `patients`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `patient_medication_history`
 --
 ALTER TABLE `patient_medication_history`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `patient_visits`
 --
 ALTER TABLE `patient_visits`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `users`
