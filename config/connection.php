@@ -2,7 +2,7 @@
 $host = "localhost";
 $user = "root";
 $password = "";
-$db = "pms_db";
+$db = "prs_db";
 try {
 
   $con = new PDO("mysql:dbname=$db;port=3307;host=$host", 
