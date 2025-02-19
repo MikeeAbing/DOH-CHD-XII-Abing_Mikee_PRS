@@ -9,7 +9,7 @@ if (isset($_POST['save_Patient'])) {
 
     $patientName = trim($_POST['patient_name']);
     $address = trim($_POST['address']);
-    $cnic = trim($_POST['cnic']);
+    $patient_number = trim($_POST['patient_number']);
     
     $dateBirth = trim($_POST['date_of_birth']);
     $dateArr = explode("/", $dateBirth);
@@ -23,11 +23,11 @@ if (isset($_POST['save_Patient'])) {
 
     $gender = $_POST['gender'];
 if ($patientName != '' && $address != '' && 
-  $cnic != '' && $dateBirth != '' && $phoneNumber != '' && $gender != '') {
+  $patient_number != '' && $dateBirth != '' && $phoneNumber != '' && $gender != '') {
       $query = "update `patients` 
     set `patient_name` = '$patientName', 
     `address` = '$address', 
-    `cnic` = '$cnic', 
+    `patient_number` = '$patient_number', 
     `date_of_birth` = '$dateBirth', 
     `phone_number` = '$phoneNumber', 
     `gender` = '$gender' 
@@ -60,7 +60,7 @@ try {
 try {
 $id = $_GET['id'];
 $query = "SELECT `id`, `patient_name`, `address`, 
-`cnic`, date_format(`date_of_birth`, '%m/%d/%Y') as `date_of_birth`,  `phone_number`, `gender` 
+`patient_number`, date_format(`date_of_birth`, '%m/%d/%Y') as `date_of_birth`,  `phone_number`, `gender` 
 FROM `patients` where `id` = $id;";
 
   $stmtPatient1 = $con->prepare($query);
@@ -142,8 +142,8 @@ include './config/sidebar.php';?>
               </div>
               <div class="col-lg-4 col-md-4 col-sm-4 col-xs-10">
                 <label>Patient Number</label>
-                <input type="text" id="cnic" name="cnic" required="required"
-                class="form-control form-control-sm rounded-0" value="<?php echo $row['cnic'];?>" />
+                <input type="text" id="patient_number" name="patient_number" required="required"
+                class="form-control form-control-sm rounded-0" value="<?php echo $row['patient_number'];?>" />
               </div>
               <div class="col-lg-4 col-md-4 col-sm-4 col-xs-10">
                 <div class="form-group">

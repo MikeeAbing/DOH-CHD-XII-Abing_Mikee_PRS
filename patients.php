@@ -8,7 +8,7 @@ if (isset($_POST['save_Patient'])) {
 
     $patientName = trim($_POST['patient_name']);
     $address = trim($_POST['address']);
-    $cnic = trim($_POST['cnic']);
+    $patient_number = trim($_POST['patient_number']);
     
     $dateBirth = trim($_POST['date_of_birth']);
     $dateArr = explode("/", $dateBirth);
@@ -22,10 +22,10 @@ if (isset($_POST['save_Patient'])) {
 
     $gender = $_POST['gender'];
 if ($patientName != '' && $address != '' && 
-  $cnic != '' && $dateBirth != '' && $phoneNumber != '' && $gender != '') {
+  $patient_number != '' && $dateBirth != '' && $phoneNumber != '' && $gender != '') {
       $query = "INSERT INTO `patients`(`patient_name`, 
-    `address`, `cnic`, `date_of_birth`, `phone_number`, `gender`)
-VALUES('$patientName', '$address', '$cnic', '$dateBirth',
+    `address`, `patient_number`, `date_of_birth`, `phone_number`, `gender`)
+VALUES('$patientName', '$address', '$patient_number', '$dateBirth',
 '$phoneNumber', '$gender');";
 try {
 
@@ -54,10 +54,12 @@ try {
 
 try {
 
-$query = "SELECT `id`, `patient_name`, `address`, 
-`cnic`, date_format(`date_of_birth`, '%d %b %Y') as `date_of_birth`, 
-`phone_number`, `gender` 
-FROM `patients` order by `patient_name` asc;";
+  $query = "SELECT `id`, `patient_name`, `address`, `patient_number`, 
+  date_format(`date_of_birth`, '%d %b %Y') as `date_of_birth`, 
+  `phone_number`, `gender` 
+  FROM `patients` WHERE `deleted_at` IS NULL 
+  ORDER BY `patient_name` ASC;";
+  
 
   $stmtPatient1 = $con->prepare($query);
   $stmtPatient1->execute();
@@ -101,30 +103,26 @@ include './config/sidebar.php';?>
 
     <!-- Main content -->
     <section class="content">
-
       <!-- Default box -->
-     <div class="card card-outline card-success rounded-0 shadow">
+      <div class="card card-outline card-success rounded-0 shadow collapsed-card">
         <div class="card-header">
           <h3 class="card-title">Add Patients</h3>
           
           <div class="card-tools">
-            <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
-              <i class="fas fa-minus"></i>
+            <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Expand">
+              <i class="fas fa-plus"></i>
             </button>
-            
           </div>
         </div>
         <div class="card-body">
           <form method="post">
             <div class="row">
               <div class="col-lg-4 col-md-4 col-sm-4 col-xs-10">
-              <label>Patient Name</label>
-              <input type="text" id="patient_name" name="patient_name" required="required"
-                class="form-control form-control-sm rounded-0"/>
+                <label>Patient Name</label>
+                <input type="text" id="patient_name" name="patient_name" required="required"
+                  class="form-control form-control-sm rounded-0"/>
               </div>
-              <br>
-              <br>
-              <br>
+              
               <div class="col-lg-4 col-md-4 col-sm-4 col-xs-10">
                 <label>Address</label> 
                 <input type="text" id="address" name="address" required="required"
@@ -132,23 +130,20 @@ include './config/sidebar.php';?>
               </div>
               <div class="col-lg-4 col-md-4 col-sm-4 col-xs-10">
                 <label>Patient Number</label>
-                <input type="text" id="cnic" name="cnic" required="required"
+                <input type="text" id="patient_number" name="patient_number" required="required"
                 class="form-control form-control-sm rounded-0"/>
               </div>
               <div class="col-lg-4 col-md-4 col-sm-4 col-xs-10">
                 <div class="form-group">
                   <label>Date of Birth</label>
-                    <div class="input-group date" 
-                    id="date_of_birth" 
-                    data-target-input="nearest">
-                        <input type="text" class="form-control form-control-sm rounded-0 datetimepicker-input" data-target="#date_of_birth" name="date_of_birth" 
-                        data-toggle="datetimepicker" autocomplete="off" />
-                        <div class="input-group-append" 
-                        data-target="#date_of_birth" 
-                        data-toggle="datetimepicker">
-                            <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                        </div>
+                  <div class="input-group date" id="date_of_birth" data-target-input="nearest">
+                    <input type="text" class="form-control form-control-sm rounded-0 datetimepicker-input" 
+                      data-target="#date_of_birth" name="date_of_birth" 
+                      data-toggle="datetimepicker" autocomplete="off" />
+                    <div class="input-group-append" data-target="#date_of_birth" data-toggle="datetimepicker">
+                      <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                     </div>
+                  </div>
                 </div>
               </div>
               <div class="col-lg-4 col-md-4 col-sm-4 col-xs-10">
@@ -157,34 +152,27 @@ include './config/sidebar.php';?>
                 class="form-control form-control-sm rounded-0"/>
               </div>
               <div class="col-lg-4 col-md-4 col-sm-4 col-xs-10">
-              <label>Gender</label>
-                <select class="form-control form-control-sm rounded-0" id="gender" 
-                name="gender">
+                <label>Gender</label>
+                <select class="form-control form-control-sm rounded-0" id="gender" name="gender">
                   <?php echo getGender();?>
                 </select>
-                
               </div>
-              </div>
-              
-              <div class="clearfix">&nbsp;</div>
+            </div>
 
-              <div class="row">
-                <div class="col-lg-11 col-md-10 col-sm-10 xs-hidden">&nbsp;</div>
+            <div class="clearfix">&nbsp;</div>
 
+            <div class="row">
+              <div class="col-lg-11 col-md-10 col-sm-10 xs-hidden">&nbsp;</div>
               <div class="col-lg-1 col-md-2 col-sm-2 col-xs-12">
-                <button type="submit" id="save_Patient" 
-                name="save_Patient" class="btn btn-success btn-sm btn-flat btn-block">Save</button>
+                <button type="submit" id="save_Patient" name="save_Patient" 
+                  class="btn btn-success btn-sm btn-flat btn-block">Save</button>
               </div>
             </div>
           </form>
         </div>
-        
       </div>
-      
     </section>
 
-     <br/>
-     <br/>
      <br/>
 
  <section class="content">
@@ -215,7 +203,7 @@ include './config/sidebar.php';?>
                     <th>Date Of Birth</th>
                     <th>Phone Number</th>
                     <th>Gender</th>
-                    <th>Action</th>
+                    <th>Actions</th>
                   </tr>
                 </thead>
 
@@ -229,14 +217,17 @@ include './config/sidebar.php';?>
                     <td><?php echo $count; ?></td>
                     <td><?php echo $row['patient_name'];?></td>
                     <td><?php echo $row['address'];?></td>
-                    <td><?php echo $row['cnic'];?></td>
+                    <td><?php echo $row['patient_number'];?></td>
                     <td><?php echo $row['date_of_birth'];?></td>
                     <td><?php echo $row['phone_number'];?></td>
                     <td><?php echo $row['gender'];?></td>
                     <td>
-                      <a href="update_patient.php?id=<?php echo $row['id'];?>" class = "btn btn-success btn-sm btn-flat">
-                      <i class="fa fa-edit"></i>
+                      <a href="update_patient.php?id=<?php echo $row['id'];?>" class="btn btn-success btn-sm btn-flat">
+                        <i class="fa fa-edit"></i>
                       </a>
+                      <button class="btn btn-danger btn-sm btn-flat delete-patient" data-id="<?php echo $row['id']; ?>">
+                        <i class="fa fa-trash"></i>
+                      </button>
                     </td>
                    
                   </tr>
@@ -272,6 +263,11 @@ include './config/sidebar.php';?>
 <?php include './config/site_js_links.php'; ?>
 <?php include './config/data_tables_js.php'; ?>
 
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script src="plugins/moment/moment.min.js"></script>
 <script src="plugins/daterangepicker/daterangepicker.js"></script>
@@ -297,6 +293,43 @@ include './config/sidebar.php';?>
     }).buttons().container().appendTo('#all_patients_wrapper .col-md-6:eq(0)');
     
   });
+
+  $(document).on('click', '.delete-patient', function () {
+    var patientId = $(this).data('id');
+    
+    Swal.fire({
+      title: "Are you sure?",
+      text: "This patient will be soft deleted!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, delete it!"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        $.ajax({
+          url: "delete_patient.php",
+          type: "POST",
+          data: { id: patientId },
+          dataType: "json",
+          success: function(response) {
+            console.log("AJAX success:", response);
+            if (response.success) {
+              Swal.fire("Deleted!", response.message, "success").then(() => {
+                location.reload();
+              });
+            } else {
+              Swal.fire("Error!", response.message, "error");
+            }
+          },
+          error: function(xhr, status, error) {
+            console.error("AJAX error:", xhr.responseText);
+            Swal.fire("Error!", "Something went wrong.", "error");
+          }
+        });
+      }
+    });
+});
 
    
 </script>

@@ -12,8 +12,7 @@ if(isset($_POST['submit'])) {
   $weight = $_POST['weight'];
   $disease = $_POST['disease'];
 
-  // Validate and sanitize medicine details
-  $medicineDetailIds = $_POST['medicineDetailIds'] ?? []; // Use null coalescing operator to avoid errors
+  $medicineDetailIds = $_POST['medicineDetailIds'] ?? []; 
   $quantities = $_POST['quantities'] ?? [];
   $dosages = $_POST['dosages'] ?? [];
 
@@ -28,7 +27,6 @@ if(isset($_POST['submit'])) {
   try {
     $con->beginTransaction();
 
-    // Insert patient visit
     $queryVisit = "INSERT INTO `patient_visits`(`visit_date`, `next_visit_date`, `bp`, `weight`, `disease`, `patient_id`) 
                    VALUES (:visitDate, NULLIF(:nextVisitDate, ''), :bp, :weight, :disease, :patientId)";
     $stmtVisit = $con->prepare($queryVisit);
@@ -41,9 +39,8 @@ if(isset($_POST['submit'])) {
       ':patientId' => $patientId
     ]);
 
-    $lastInsertId = $con->lastInsertId(); // Get latest patient visit ID
+    $lastInsertId = $con->lastInsertId(); 
 
-    // Insert medication history if there are medicines selected
     if (!empty($medicineDetailIds) && is_array($medicineDetailIds)) {
       $size = count($medicineDetailIds);
 
